@@ -1245,6 +1245,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 984861942473064729}
+    - target: {fileID: 2553657831100199260, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2827975523660166523, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1999,12 +2003,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82fee7a50c689944286809374448feaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstBoot: 1
-  boss1Defeated: 0
-  boss2Defeated: 0
-  easterEgg1Found: 0
-  easterEgg2Found: 0
-  easterEgg3Found: 0
+  firstBoot: 0
+  boss1Defeated: 1
+  boss2Defeated: 1
+  easterEgg1Found: 1
+  easterEgg2Found: 1
+  easterEgg3Found: 1
   easterEgg4Found: 0
 --- !u!4 &1069468938
 Transform:
