@@ -19,6 +19,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Canvas easterEgg1Menu;
     [SerializeField] private Canvas easterEgg2Menu;
     [SerializeField] private Canvas easterEgg3Menu;
+    [SerializeField] private Canvas easterEgg4Menu;
 
     private PlayerController player;
     private Canvas activeCanvas; // Current menu canvas thats open
@@ -82,6 +83,9 @@ public class MenuManager : MonoBehaviour
                 break;
             case "EasterEggThreeMenuCanvas":
                 activeCanvas = easterEgg3Menu;
+                break;
+            case "EasterEggFourMenuCanvas":
+                activeCanvas = easterEgg4Menu;
                 break;
         }
 

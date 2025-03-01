@@ -1245,28 +1245,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 984861942473064729}
-    - target: {fileID: 2506287359231532688, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2737945004352391928, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
-      propertyPath: m_text
-      value: "Hello player! Thank you for playing my game. My name is James Anderson,
-        and I\u2019m the developer behind Mechanations. Congratulations on finding
-        this message! I wanted to add a personal, \u201Csecret\u201D touch to the
-        game. Here\u2019s a little bit about me: I was born in 1965 in Oakridge,
-        Wyoming, and have spent most of my life here. I have two daughters, Zelda
-        and Chloe, whom I\u2019m raising to be avid gamers, just like myself.\r\n\nWhile
-        my path in game development didn\u2019t exactly turn out as I expected, I\u2019m
-        thrilled to be working on any game development, no matter the nature of the
-        project. Even though Mechanations is part of a governmental initiative with
-        its own objectives, my goal is to make it an exciting and enjoyable experience
-        for everyone who chooses to play. The power the player can channel through
-        a simple blue sprite is electric! (Fun Fact: I based the sprite of the player
-        off of myself as a nod to how I wear blue almost every day). Once again,
-        thank you for playing the game, and I\u2019ll talk to you soon! (That is,
-        if you\u2019re able to find the other secrets!)"
-      objectReference: {fileID: 0}
     - target: {fileID: 2827975523660166523, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1311,6 +1289,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3755543342256854775, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 984861942473064729}
     - target: {fileID: 3755976297327467748, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1326,24 +1308,6 @@ PrefabInstance:
     - target: {fileID: 4966574267924732438, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
       propertyPath: m_Name
       value: MenuManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5509743449966477823, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
-      propertyPath: m_text
-      value: "This is MY project. Mechanations is MINE. It's no wonder I see myself
-        in that little blue guy. No one has the right to tell me what to do with
-        the work I\u2019ve poured myself into. They\u2019re my ENEMIES. The department
-        doesn't understand what a game truly is. Controlling players through their
-        psyche, while morally questionable, would be far more effective if the game
-        operated as a drip-feed.\r\n\nThe new guy\u2026 Derek. He demoed his questionable
-        new enemy to me today. It was a disgrace. I\u2019m not sure what Derek knows
-        or what his connections are, but his work has left me utterly disturbed.
-        I have no interest in including it as a public part of the game. \u201CParts\u201D
-        of me think I should leave it in the code for someone to discover. After
-        I do what I need to do. After I end his threats once and for all.\r\n\nThis
-        is likely going to be my last message, and I don\u2019t see development continuing
-        past this point. If anyone reads this, please, never to back down to authority
-        for the sake of creativity.\r\n\nThank you for playing Mechanations, and
-        never stop gaming!\r\n"
       objectReference: {fileID: 0}
     - target: {fileID: 5847433448432418559, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
       propertyPath: m_Camera
@@ -1361,10 +1325,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 984861942473064729}
-    - target: {fileID: 8344196563910975530, guid: 3ff3df8b404d243478f2f05d67a27044, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2045,6 +2005,7 @@ MonoBehaviour:
   easterEgg1Found: 0
   easterEgg2Found: 0
   easterEgg3Found: 0
+  easterEgg4Found: 0
 --- !u!4 &1069468938
 Transform:
   m_ObjectHideFlags: 0
@@ -2378,6 +2339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   warningScreen: {fileID: 54995103}
+  bossFourEEPanel: {fileID: 0}
   bossTwoButton: {fileID: 1271754402}
   bossThreeButton: {fileID: 1901303857}
   bossOneEEButton: {fileID: 1919506530}

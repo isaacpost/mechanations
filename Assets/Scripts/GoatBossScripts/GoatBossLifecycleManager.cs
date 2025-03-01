@@ -49,9 +49,9 @@ public class GoatBossLifecycleManager : LifecycleManager
     {
         StopCoroutine(bossCoroutine);
 
-        for (int i = 0; i < 3; i++) 
+        for (int i = 0; i < 5; i++) 
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
             SFXManager.Instance.PlaySound("GoatBossDead");
         }
@@ -68,6 +68,8 @@ public class GoatBossLifecycleManager : LifecycleManager
         Instantiate(coffinPrefab, playerObj.transform.position, transform.rotation);
 
         yield return new WaitForSeconds(5f);
+
+        GameManager.Instance.EasterEggFound("BossFourScene");
 
         MenuManager.Instance.MainMenu();
     }

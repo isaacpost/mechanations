@@ -4,6 +4,7 @@ using UnityEngine;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject warningScreen;
+    [SerializeField] private GameObject bossFourEEPanel;
 
     [Header("Boss Buttons")]
     [SerializeField] private GameObject bossTwoButton;
@@ -41,6 +42,11 @@ public class MainMenuManager : MonoBehaviour
         if (GameManager.Instance.IsEasterEggFound(3))
         {
             bossThreeEEButton.SetActive(true);
+        }
+
+        if (GameManager.Instance.IsEasterEggFound(4))
+        {
+            MenuManager.Instance.OpenMenu("EasterEggFourMenuCanvas");
         }
     }
 }

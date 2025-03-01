@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool easterEgg1Found = false;
     [SerializeField] private bool easterEgg2Found = false;
     [SerializeField] private bool easterEgg3Found = false;
+    [SerializeField] private bool easterEgg4Found = false;
 
     // Ensure the GameManager persists between scenes
     void Awake()
@@ -59,6 +60,9 @@ public class GameManager : MonoBehaviour
             case "BossThreeScene":
                 easterEgg3Found = true;
                 break;
+            case "BossFourScene":
+                easterEgg4Found = true;
+                break;
         }
     }
 
@@ -95,6 +99,8 @@ public class GameManager : MonoBehaviour
                 return easterEgg2Found;
             case 3:
                 return easterEgg3Found;
+            case 4:
+                return easterEgg4Found;
             default:
                 return false;
         }
