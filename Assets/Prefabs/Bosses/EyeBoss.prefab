@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5018388701182711601
+--- !u!1 &7664995026560330871
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2341730623159956550}
-  - component: {fileID: 2590530861566450823}
-  - component: {fileID: 7321350614385792049}
-  - component: {fileID: -9145386918533681103}
-  - component: {fileID: 1083204236209836}
-  m_Layer: 7
-  m_Name: GearPowerSource
-  m_TagString: Untagged
+  - component: {fileID: 2552175700264866057}
+  - component: {fileID: 1450348613342235270}
+  - component: {fileID: 5809019581035083787}
+  - component: {fileID: 2103355102130920904}
+  - component: {fileID: 9035211138322569519}
+  - component: {fileID: 8900600746086113565}
+  m_Layer: 0
+  m_Name: EyeBoss
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2341730623159956550
+--- !u!4 &2552175700264866057
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018388701182711601}
+  m_GameObject: {fileID: 7664995026560330871}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.95, y: 0.95, z: 0.95}
+  m_LocalPosition: {x: 5, y: 2.5, z: -0.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2590530861566450823
+--- !u!212 &1450348613342235270
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018388701182711601}
+  m_GameObject: {fileID: 7664995026560330871}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,25 +76,64 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -5804586154615921754, guid: 5eb1c887c9dedd94e9cbdc8c4ec46a3e, type: 3}
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 777583170395354870, guid: b7e4971a26cc22e4690ee69f9ef7db40, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &7321350614385792049
+--- !u!114 &5809019581035083787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664995026560330871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1308cafab5bda8f499a5f913c3b34cef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 5018388701182711601, guid: 3123e353f59dd4f4b88762caef967b2b, type: 3}
+  leftBound: -5
+  rightBound: 5
+  moveSpeed: 2
+  maxAngle: 60
+  gridManager: {fileID: 0}
+--- !u!95 &2103355102130920904
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664995026560330871}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 15b90422273541a42b59c9a18967f3b8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &9035211138322569519
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018388701182711601}
+  m_GameObject: {fileID: 7664995026560330871}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -122,52 +162,27 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1.0625}
-    newSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.6666667}
+    oldSize: {x: 2, y: 0.1875}
+    newSize: {x: 0.32, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.25, y: 1}
   m_EdgeRadius: 0
---- !u!95 &-9145386918533681103
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018388701182711601}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 6766538325844495076, guid: 5eb1c887c9dedd94e9cbdc8c4ec46a3e, type: 3}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1083204236209836
+--- !u!114 &8900600746086113565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5018388701182711601}
+  m_GameObject: {fileID: 7664995026560330871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e297bd92bbfc44e88611a46804ea51, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e5ed141650832b42b767be998e496b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlaced: 0
-  staticSprite: {fileID: -5804586154615921754, guid: 9cb5fc09f139c914fb1fee1636a28047, type: 3}
-  spriteObject: {fileID: 5018388701182711601}
-  shutdownDelay: 1
-  slowedSpeed: 0.3
-  isPowerSource: 1
+  maxHealth: 150
+  healthBar: {fileID: 0}

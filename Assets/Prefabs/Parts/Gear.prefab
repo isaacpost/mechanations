@@ -217,6 +217,8 @@ MonoBehaviour:
   isPlaced: 0
   staticSprite: {fileID: -5804586154615921754, guid: 284648ca73e431e4f9567a6cd4f6bbd9, type: 3}
   spriteObject: {fileID: 4711339062704787585}
+  shutdownDelay: 2
+  slowedSpeed: 0.1
 --- !u!114 &6988557635531638361
 MonoBehaviour:
   m_ObjectHideFlags: 0

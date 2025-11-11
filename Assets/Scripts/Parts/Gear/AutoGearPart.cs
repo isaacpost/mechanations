@@ -17,7 +17,7 @@ public class AutoGearPart : GearPart
         // Keeps track of the powered gears found
         List<TurretPart> foundPoweredParts = new List<TurretPart>();
 
-        if (GetIsPlaced() && isPowered)
+        if (GetIsPlaced() && IsPowered())
         {
             // Get the local position and convert to world position
             Vector2 localPosition = transform.localPosition;

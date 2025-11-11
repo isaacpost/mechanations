@@ -12,7 +12,7 @@ public class ConveyorBeltManager : MonoBehaviour, IPlaceableSurface
     [SerializeField] GameObject gridPrefab; // The grid prefab to instantate the parts on
     [SerializeField] float destroyDistance = 17f; // How far the parts need to travel before getting destroyed
 
-    private bool isRunning = false;
+    private bool isRunning = true;
     private float timer = 0f; // Keeps track of when to next instantate a part
     private static List<GameObject> instantiatedGrids; // List of grid on the ConveyorBelt
     private List<GameObject> prefabQueue;

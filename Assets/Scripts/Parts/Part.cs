@@ -32,10 +32,10 @@ public abstract class Part : MonoBehaviour, IDamagable
     }
 
     // Searching method to see if there are any adjacent gears that are active
-    protected List<IGear> FindAdjacentGears()
+    protected List<GearPart> FindAdjacentGears()
     {
         // Keeps track of the powered gears found
-        List<IGear> foundPoweredParts = new List<IGear>();
+        List<GearPart> foundPoweredParts = new List<GearPart>();
 
         if (isPlaced)
         {
@@ -60,7 +60,7 @@ public abstract class Part : MonoBehaviour, IDamagable
 
                 if (hit != null)
                 {
-                    IGear gear = hit.GetComponent<IGear>();
+                    GearPart gear = hit.GetComponent<GearPart>();
 
                     if (gear != null && gear.IsPowered())
                     {
