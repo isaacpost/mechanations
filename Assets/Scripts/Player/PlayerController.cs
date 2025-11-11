@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float flashDuration = 0.1f; // Time the sprite is visible or invisible.
     [SerializeField] private int flashCount = 5; // Number of flashes.
 
+    // Add anywhere inside PlayerController class (e.g., near fields)
+    public Vector2 MovementInput => movementInput;
+
+
     private bool invincibilityActive = false;
     private Health health; // Players health
     private int currentAmmo = 3;
@@ -129,14 +133,10 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         IPlaceableSurface surface = tileObj.GetComponentInParent<IPlaceableSurface>();
 
-        Debug.Log(surface);
-
         // Pick Up Part
         if (surface != null && heldItem == null && IsTileWithinRange(tileObj))
         {
             GameObject pickedUpPart = surface.PickUpItem(clickPosition);
-
-            Debug.Log(pickedUpPart);
 
             if (pickedUpPart)
             {
@@ -178,18 +178,18 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void OnRightClick()
     {
-        if (currentAmmo > 0)
-        {
-            ammoDisplay.DecreaseAmmo(1);
-            currentAmmo--;
-            SFXManager.Instance.PlaySound("TurretShoot");
-            Shoot();
-        }
-        else
-        {
-            ammoDisplay.GetComponent<SpriteShaker>().Shake();
-            SFXManager.Instance.PlaySound("Empty");
-        }
+        // if (currentAmmo > 0)
+        // {
+        //     ammoDisplay.DecreaseAmmo(1);
+        //     currentAmmo--;
+        //     SFXManager.Instance.PlaySound("TurretShoot");
+        //     Shoot();
+        // }
+        // else
+        // {
+        //     ammoDisplay.GetComponent<SpriteShaker>().Shake();
+        //     SFXManager.Instance.PlaySound("Empty");
+        // }
     }
 
     void Shoot()

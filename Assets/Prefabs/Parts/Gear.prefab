@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4711339062704787585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 0.95, y: 0.95, z: 0.95}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -215,10 +215,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlaced: 0
-  staticSprite: {fileID: -5804586154615921754, guid: 284648ca73e431e4f9567a6cd4f6bbd9, type: 3}
   spriteObject: {fileID: 4711339062704787585}
+  isPowerSource: 0
+  isPowerStore: 0
   shutdownDelay: 2
   slowedSpeed: 0.1
+  dimmedBrightness: 0.4
+  brightenSpeed: 3
 --- !u!114 &6988557635531638361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 4
   healthBar: {fileID: 323657419914563666}
+  startHealth: 0
 --- !u!1001 &3313047132180443059
 PrefabInstance:
   m_ObjectHideFlags: 0

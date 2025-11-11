@@ -1,70 +1,68 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
 
-// Gear part that arrives on conveyor belt
 public class GearPart : Part, IDamagable
 {
-    [SerializeField] Sprite staticSprite; // Sprite for when not powered
-    [SerializeField] GameObject spriteObject; // Sprite for when not powered
-    [SerializeField] private bool isPowerSource = false; // Animation speed during shutdown
+    [Header("Visuals")]
+    [SerializeField] private GameObject spriteObject;
+    [SerializeField] private bool isPowerSource = false;
+    [SerializeField] private bool isPowerStore = false;
 
-    private SpriteRenderer spriteRenderer; // Sprite component
-    private Animator animator; // animator components
-    private List<GearPart> adjacentPoweredParts; // Keeps list of adjacent powered gears
+    [Header("Shutdown Settings")]
+    [SerializeField] private float shutdownDelay = 3f; // Time to fade and slow
+    [SerializeField] private float slowedSpeed = 0.1f; // Animation speed during fade
+    [SerializeField, Range(0f, 1f)] private float dimmedBrightness = 0.4f; // Brightness when unpowered
+    [SerializeField] private float brightenSpeed = 3f; // How fast it brightens when powered
+
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private List<GearPart> adjacentPoweredParts;
     private bool isPowered;
-    private bool isShuttingDown; // To prevent multiple coroutines running
-    private float shutdownDelay = 3f; // How long to slow before stopping
-    private float slowedSpeed = 0.1f; // Animation speed during shutdown
+    private bool isShuttingDown;
     private Vector3 lastPosition;
     private float threshold = 0.001f;
+    private Color fullColor;
+    private Color dimColor;
 
-    // Called when the script instance is loaded
     protected override void Awake()
     {
         base.Awake();
 
-        // Get the components
         spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
         animator = spriteObject.GetComponent<Animator>();
-
         adjacentPoweredParts = new List<GearPart>();
 
+        fullColor = Color.white;
+        dimColor = new Color(fullColor.r * dimmedBrightness, fullColor.g * dimmedBrightness, fullColor.b * dimmedBrightness, fullColor.a);
+
+        // Start dimmed and animation off
+        spriteRenderer.color = dimColor;
         animator.enabled = false;
-        spriteRenderer.sprite = staticSprite;
 
         lastPosition = transform.position;
     }
 
-    // Update is called once per frame
     protected void Update()
     {
         GearPoweredLogic();
         AnimationLogic();
     }
 
-    // Calls shaker animation since cant be rotated
     public override void Rotate(float degrees)
     {
         SFXManager.Instance.PlaySound("Error");
         spriteObject.GetComponent<SpriteShaker>().Shake();
     }
 
-    // Return value of isPowered
-    public bool IsPowered()
-    {
-        return isPowered;
-    }
+    public bool IsPowered() => isPowered;
 
-    // Stops being powered before its destroyed to alert other gears
     private void OnDestroy()
     {
         isPowered = false;
     }
 
-    // Called once per frame to see if the gear is powered or not
     private void GearPoweredLogic()
     {
         if (isPowerSource)
@@ -73,22 +71,18 @@ public class GearPart : Part, IDamagable
             return;
         }
 
-        // If no adjacent powered parts, search for them
-        if (adjacentPoweredParts.Count == 0)
+        if (adjacentPoweredParts.Count == 0 && (GetIsPlaced() || isPowerStore))
         {
             adjacentPoweredParts = FindAdjacentGears();
-
-            // If found adjacent powered parts, set current gear to powered and aniamte
             if (adjacentPoweredParts.Count > 0)
             {
                 isPowered = true;
                 animator.enabled = true;
             }
         }
-
-        // If any of the surrounding parts aren't powered anymore, reset gear
-        // Or if the gear was picked up, reset gear
-        else if (adjacentPoweredParts.Any(obj => !obj.IsPowered()) || !GetIsPlaced() || Vector3.Distance(transform.position, lastPosition) > threshold)
+        else if (adjacentPoweredParts.Any(obj => !obj.IsPowered())
+                 || !GetIsPlaced()
+                 || Vector3.Distance(transform.position, lastPosition) > threshold)
         {
             isPowered = false;
             adjacentPoweredParts = new List<GearPart>();
@@ -100,7 +94,6 @@ public class GearPart : Part, IDamagable
     {
         if (IsPowered())
         {
-            // Cancel any shutdown process if we get powered again
             if (isShuttingDown)
             {
                 StopAllCoroutines();
@@ -109,32 +102,35 @@ public class GearPart : Part, IDamagable
             }
 
             animator.enabled = true;
+            // Smoothly brighten back to full color
+            spriteRenderer.color = Color.Lerp(spriteRenderer.color, fullColor, Time.deltaTime * brightenSpeed);
         }
         else if (!isShuttingDown && animator.enabled)
         {
-            // Begin shutdown process
-            StartCoroutine(SlowDownBeforeStop());
+            StartCoroutine(SlowDownAndDim());
         }
     }
 
-    private IEnumerator SlowDownBeforeStop()
+    private IEnumerator SlowDownAndDim()
     {
         isShuttingDown = true;
 
-        // Gradually slow down
         float originalSpeed = animator.speed;
         float elapsed = 0f;
+        Color startColor = spriteRenderer.color;
+
         while (elapsed < shutdownDelay)
         {
-            animator.speed = Mathf.Lerp(originalSpeed, slowedSpeed, elapsed / shutdownDelay);
+            float t = elapsed / shutdownDelay;
+            animator.speed = Mathf.Lerp(originalSpeed, slowedSpeed, t);
+            spriteRenderer.color = Color.Lerp(startColor, dimColor, t);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Finalize shutdown
-        animator.speed = 1f; // Reset speed for next activation
+        animator.speed = 1f;
         animator.enabled = false;
-        spriteRenderer.sprite = staticSprite;
+        spriteRenderer.color = dimColor;
 
         isShuttingDown = false;
     }

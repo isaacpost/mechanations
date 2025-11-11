@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PowerManager : MonoBehaviour
 {
+
+
     public int maxPower;
+    public GearPart endGear;
+    public Health powerHealth; // Players health
+    public Health goalPowerHealth; // Target power fill health
 
     public static PowerManager Instance;
-    
-    private Health powerHealth; // Players health
+
     private float timer = 0f;
 
     // Ensure the GameManager persists between scenes
@@ -25,11 +29,6 @@ public class PowerManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        powerHealth = GetComponent<Health>();
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -37,8 +36,15 @@ public class PowerManager : MonoBehaviour
 
         if (timer >= 1f)
         {
-            powerHealth.TakeDamage(1);
-            timer = 0f;
+            if (endGear.IsPowered())
+            {
+                goalPowerHealth.TakeDamage(-1);
+            }
+            else
+            {
+                powerHealth.TakeDamage(1);
+                timer = 0f;   
+            }
         }
     }
 

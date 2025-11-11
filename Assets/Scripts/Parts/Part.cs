@@ -36,39 +36,37 @@ public abstract class Part : MonoBehaviour, IDamagable
     {
         // Keeps track of the powered gears found
         List<GearPart> foundPoweredParts = new List<GearPart>();
+        
+        // Get the local position and convert to world position
+        Vector2 localPosition = transform.localPosition;
 
-        if (isPlaced)
+        // Adjacent directions in local space
+        Vector2[] directions = {
+            new Vector2(0, checkRadius),    // Up
+            new Vector2(0, -checkRadius),   // Down
+            new Vector2(-checkRadius, 0),   // Left
+            new Vector2(checkRadius, 0)     // Right
+        };
+
+        foreach (Vector2 direction in directions)
         {
-            // Get the local position and convert to world position
-            Vector2 localPosition = transform.localPosition;
+            // Convert the local offset into world space before doing the overlap check
+            Vector3 worldPoint = transform.parent.TransformPoint(localPosition + direction);
 
-            // Adjacent directions in local space
-            Vector2[] directions = {
-                new Vector2(0, checkRadius),    // Up
-                new Vector2(0, -checkRadius),   // Down
-                new Vector2(-checkRadius, 0),   // Left
-                new Vector2(checkRadius, 0)     // Right
-            };
+            // Perform overlap in world space
+            Collider2D hit = Physics2D.OverlapPoint(worldPoint, checkLayer);
 
-            foreach (Vector2 direction in directions)
+            if (hit != null)
             {
-                // Convert the local offset into world space before doing the overlap check
-                Vector3 worldPoint = transform.parent.TransformPoint(localPosition + direction);
+                GearPart gear = hit.GetComponent<GearPart>();
 
-                // Perform overlap in world space
-                Collider2D hit = Physics2D.OverlapPoint(worldPoint, checkLayer);
-
-                if (hit != null)
+                if (gear != null && gear.IsPowered())
                 {
-                    GearPart gear = hit.GetComponent<GearPart>();
-
-                    if (gear != null && gear.IsPowered())
-                    {
-                        foundPoweredParts.Add(gear);
-                    }
+                    foundPoweredParts.Add(gear);
                 }
             }
         }
+        
 
         return foundPoweredParts;
     }

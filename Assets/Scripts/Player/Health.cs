@@ -8,15 +8,18 @@ public class Health : MonoBehaviour
     [SerializeField] 
     private float maxHealth;
 
-    [SerializeField] 
+    [SerializeField]
     private Slider healthBar; // Assign the UI slider in the Inspector.
+    
+    [SerializeField] 
+    private float startHealth; // Assign the UI slider in the Inspector.
 
     private float currentHealth;
     private IDamagable damageable; // Damageable script of the object the health is for
 
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = startHealth;
         UpdateHealthBar();
 
         // Gets damageable component, usually a controller of some kind
