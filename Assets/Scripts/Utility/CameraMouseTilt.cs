@@ -1,14 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraMouseTilt : MonoBehaviour
 {
     [Header("Input Source")]
-    [SerializeField] private PlayerController player; // Assign in Inspector
+    [SerializeField] private PlayerController player;
 
     [Header("Tilt Settings")]
-    [SerializeField] private float maxUpwardRotation = 3f;
-    [SerializeField] private float maxDownwardRotation = 3f;
+    [SerializeField] private float maxUpwardRotation = 3f;     // when pressing DOWN
+    [SerializeField] private float maxDownwardRotation = 3f;   // when pressing UP
     [SerializeField] private float maxRotationY = 5f;
     [SerializeField] private float smoothSpeed = 3f;
 
@@ -37,14 +36,21 @@ public class CameraMouseTilt : MonoBehaviour
         if (moveDir.sqrMagnitude > 1f)
             moveDir.Normalize();
 
-        // --- ROTATION (flipped directions) ---
-        float tY = (moveDir.y + 1f) * 0.5f;
-        // Invert pitch & yaw signs to flip rotation response
-        float pitchX = Mathf.Lerp(maxUpwardRotation, -maxDownwardRotation, tY);
-        float yawY = Mathf.Clamp(-moveDir.x * maxRotationY, -maxRotationY, maxRotationY);
+        bool hasInput = moveDir.sqrMagnitude > 0.0001f;
 
-        Quaternion tiltRot = Quaternion.Euler(pitchX, -yawY, 0f);
-        Quaternion targetLocalRot = moveDir == Vector2.zero ? _startLocalRot : _startLocalRot * tiltRot;
+        float tY = (moveDir.y + 1f) * 0.5f;
+
+        // ---- ROTATION ----
+        float pitchX = Mathf.Lerp(maxUpwardRotation, maxDownwardRotation, tY);
+
+        // INVERT X ROTATION HERE
+        pitchX = -pitchX;
+
+        float yawY = moveDir.x * maxRotationY;
+
+        Quaternion targetLocalRot = hasInput
+            ? _startLocalRot * Quaternion.Euler(pitchX, yawY, 0f)
+            : _startLocalRot;
 
         transform.localRotation = Quaternion.Slerp(
             transform.localRotation,
@@ -52,12 +58,15 @@ public class CameraMouseTilt : MonoBehaviour
             Time.deltaTime * smoothSpeed
         );
 
-        // --- POSITION OFFSET (flipped to match new rotation) ---
-        Vector3 planarOffset = new Vector3(-moveDir.x * maxPositionOffset, -moveDir.y * maxPositionOffset, 0f);
-        float forwardOffset = Mathf.Lerp(-maxZOffset, maxZOffset, tY);
-        Vector3 zOffset = new Vector3(0f, 0f, forwardOffset);
+        // ---- POSITION OFFSET ----
+        Vector3 offset = new Vector3(
+            -moveDir.x * maxPositionOffset,
+            -moveDir.y * maxPositionOffset,
+            Mathf.Lerp(-maxZOffset, maxZOffset, tY)
+        );
 
-        Vector3 targetLocalPos = _startLocalPos + planarOffset + zOffset;
+        Vector3 targetLocalPos = _startLocalPos + offset;
+
         transform.localPosition = Vector3.Lerp(
             transform.localPosition,
             targetLocalPos,

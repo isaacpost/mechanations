@@ -151,6 +151,12 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("BossFourScene");
     }
 
+    public void SwitchToGameplayScene()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameplayScene");
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR

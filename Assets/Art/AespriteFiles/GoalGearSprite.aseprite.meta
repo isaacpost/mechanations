@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 54a936dce21c686439ebc4b166a972e0
+guid: 9a8649b82339c644086e44475427a41a
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -36,7 +36,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 16
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638731758167595091
+  platformSettingsDirtyTick: 638731778108308617
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -122,18 +122,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: MechanationsLogo
+  - name: GearSprite
     originalName: 
-    pivot: {x: 0.5, y: 0.44444442}
+    pivot: {x: 0.5, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 192
-      height: 36
-    spriteID: ac275cff99efc2a419352b5896cd62c7
+      width: 16
+      height: 17
+    spriteID: 928659f28c11c9942829758f11cfeb8b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -142,29 +142,116 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Frame_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 4
+      width: 16
+      height: 17
+    spriteID: 7295ae32d80bc3143b677c26e55ea04f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 4}
+  - name: Frame_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 29
+      width: 16
+      height: 17
+    spriteID: 4b6c39bb4be8a654980d538c8feaae6b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 29}
+  - name: Frame_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 29
+      width: 16
+      height: 17
+    spriteID: 1ec18ee25c0de8f4b8ee29fbc1d68783
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 29}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 1789813645
+      value0: 3018496796
       value1: 0
       value2: 0
       value3: 0
-    guid: 1789813645
-    name: MechanationsLogo
+    guid: -1276470500
+    name: GearSprite
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: MechanationsLogo_1
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
-        y: 66
-        width: 192
-        height: 36
-      spriteId: ac275cff99efc2a419352b5896cd62c7
+        y: 0
+        width: 16
+        height: 17
+      spriteId: 928659f28c11c9942829758f11cfeb8b
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 16
+        height: 17
+      spriteId: 7295ae32d80bc3143b677c26e55ea04f
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 16
+        height: 17
+      spriteId: 4b6c39bb4be8a654980d538c8feaae6b
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 16
+        height: 17
+      spriteId: 1ec18ee25c0de8f4b8ee29fbc1d68783
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -231,5 +318,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 192, y: 164}
-  previousTextureSize: {x: 256, y: 64}
+  canvasSize: {x: 16, y: 17}
+  previousTextureSize: {x: 64, y: 64}

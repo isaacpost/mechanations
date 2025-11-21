@@ -2,61 +2,75 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-// Main controller for player. Holds attributes, sets health, and performs actions based on input.
 public class PlayerController : MonoBehaviour, IDamagable
 {
-    [SerializeField] private float moveSpeed = 5f; // Speed the player can move around
-    [SerializeField] private BoxCollider2D boundaryCollider; // Collider of play area
-    [SerializeField] private BoxCollider2D innerBoundaryCollider; // OPTIONAL: inner collider of play area
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private GameObject heldItem; // The part in the player's hands
-    [SerializeField] private float interactRange = 2f; // Distance the player can grab parts from
-    [SerializeField] private GameObject highlightBorder; // The highlight on the grid
-    [SerializeField] private GameObject projectilePrefab; // Projectile the pea shooter shoots
-    [SerializeField] private Sprite staticSprite; // Static sprite of player to set when not moving
-    [SerializeField] private AmmoDisplay ammoDisplay; // The text on the ui display of the player's ammo
-    [SerializeField] private float flashDuration = 0.1f; // Time the sprite is visible or invisible.
-    [SerializeField] private int flashCount = 5; // Number of flashes.
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 5f;
 
-    // Add anywhere inside PlayerController class (e.g., near fields)
+    [Header("Boundaries")]
+    [SerializeField] private BoxCollider2D boundaryCollider;
+    [SerializeField] private BoxCollider2D innerBoundaryCollider;
+
+    [Header("References")]
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private GameObject heldItem;
+    [SerializeField] private GameObject highlightBorder;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Sprite staticSprite;
+    [SerializeField] private AmmoDisplay ammoDisplay;
+    [SerializeField] private GameObject gearPrefab;
+
+    [Header("Interaction")]
+    [SerializeField] private float interactRange = 2f;
+    [SerializeField] private float partRotateAmt = 30f;
+
+    [Header("Damage Flash")]
+    [SerializeField] private float flashDuration = 0.1f;
+    [SerializeField] private int flashCount = 5;
+
+    [Header("Range Indicator")]
+    [SerializeField] private LineRenderer rangeIndicator;
+    [SerializeField] private int circleSegments = 60;
+    [SerializeField] private float lineWidth = 0.05f;
+    [SerializeField] private bool showRangeIndicator = true;
+
     public Vector2 MovementInput => movementInput;
 
-
     private bool invincibilityActive = false;
-    private Health health; // Players health
+    private Health health;
     private int currentAmmo = 3;
     private readonly int maxAmmo = 3;
-    private readonly float partRotateAmt = 30f; // The amount to rotate parts by
     private SpriteRenderer spriteRenderer;
     private Animator animator;
-    private Vector2 movementInput; // Current movement input from player
+    private Vector2 movementInput;
     private Rigidbody2D rb;
-    private BoxCollider2D playerCollider; // Collider of player object
-    private Vector2 itemOffset = new(0f, 0.5f); // moves item up into player's hand
-    private LayerMask playerIgnoreMask; // The mask the player should ignore
+    private BoxCollider2D playerCollider;
+    private Vector2 itemOffset = new(0f, 0.5f);
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<BoxCollider2D>();
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
         health = GetComponent<Health>();
 
-        playerIgnoreMask = ~LayerMask.GetMask("Player");
-
-        if (boundaryCollider == null)
-            Debug.LogError("Boundary Collider is not assigned!");
-
         if (rb.bodyType != RigidbodyType2D.Kinematic)
-        {
-            Debug.LogWarning("Rigidbody2D should be set to Kinematic for this script to work properly.");
             rb.bodyType = RigidbodyType2D.Kinematic;
-        }
 
         if (mainCamera == null)
             mainCamera = Camera.main;
+
+        if (rangeIndicator != null)
+        {
+            if (circleSegments < 3) circleSegments = 3;
+            rangeIndicator.loop = true;
+            rangeIndicator.positionCount = circleSegments;
+            rangeIndicator.startWidth = lineWidth;
+            rangeIndicator.endWidth = lineWidth;
+            rangeIndicator.useWorldSpace = true;
+            rangeIndicator.enabled = showRangeIndicator;
+        }
     }
 
     private void FixedUpdate()
@@ -66,19 +80,16 @@ public class PlayerController : MonoBehaviour, IDamagable
             Vector2 newPosition = rb.position + movementInput * moveSpeed * Time.fixedDeltaTime;
             Vector2 halfSize = playerCollider.bounds.extents;
 
-            // Clamp the position within the outer boundary
             Vector2 clampedPosition = new Vector2(
                 Mathf.Clamp(newPosition.x, boundaryCollider.bounds.min.x + halfSize.x, boundaryCollider.bounds.max.x - halfSize.x),
                 Mathf.Clamp(newPosition.y, boundaryCollider.bounds.min.y + halfSize.y, boundaryCollider.bounds.max.y - halfSize.y)
             );
 
-            // Check if the new position would be inside the inner boundary
             if (innerBoundaryCollider != null && innerBoundaryCollider.bounds.Contains(clampedPosition))
             {
                 Vector2 movementDirection = (clampedPosition - rb.position).normalized;
-
                 while (innerBoundaryCollider.bounds.Contains(clampedPosition))
-                    clampedPosition -= movementDirection * 0.01f; // Small step backward
+                    clampedPosition -= movementDirection * 0.01f;
             }
 
             rb.MovePosition(clampedPosition);
@@ -87,23 +98,31 @@ public class PlayerController : MonoBehaviour, IDamagable
         HighlightHoverWithinRange();
     }
 
+    private void LateUpdate()
+    {
+        UpdateRangeIndicator();
+    }
+
     private void HighlightHoverWithinRange()
     {
         GameObject obj = GetTileAtPosition(GetMousePosition());
 
         if (obj != null)
         {
-            if (IsTileWithinRange(obj) && IsTileWithinRange(gameObject) && obj != heldItem)
+            if (IsTileWithinRange(obj))
             {
                 highlightBorder.SetActive(true);
                 highlightBorder.transform.SetParent(obj.transform);
                 highlightBorder.transform.localPosition = Vector2.zero;
             }
-            else
-            {
-                highlightBorder.SetActive(false);
-            }
+            else highlightBorder.SetActive(false);
         }
+        else highlightBorder.SetActive(false);
+    }
+
+    private void OnEsc()
+    {
+        MenuManager.Instance.TogglePause();
     }
 
     private void OnMove(InputValue value)
@@ -112,89 +131,112 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (movementInput.magnitude == 0)
         {
-            if (animator != null)
-            {
-                animator.enabled = false;
-                spriteRenderer.sprite = staticSprite;
-            }
+            animator.enabled = false;
+            spriteRenderer.sprite = staticSprite;
         }
-        else
-        {
-            animator.enabled = true;
-        }
+        else animator.enabled = true;
     }
 
     public void OnLeftClick()
     {
         Vector2 clickPosition = GetMousePosition();
         GameObject tileObj = GetTileAtPosition(clickPosition);
-
         if (tileObj == null) return;
 
         IPlaceableSurface surface = tileObj.GetComponentInParent<IPlaceableSurface>();
+        if (surface == null) return;
 
-        // Pick Up Part
-        if (surface != null && heldItem == null && IsTileWithinRange(tileObj))
+        if (!IsTileWithinRange(tileObj)) return;
+
+        if (heldItem == null)
         {
-            GameObject pickedUpPart = surface.PickUpItem(clickPosition);
-
-            if (pickedUpPart)
-            {
-                if (pickedUpPart.GetComponent<AmmoRefillPart>() != null)
-                {
-                    SFXManager.Instance.PlaySound("PickUpItem");
-                    ammoDisplay.ResetAmmo();
-                    currentAmmo = maxAmmo;
-                    Destroy(pickedUpPart);
-                }
-                else
-                {
-                    SFXManager.Instance.PlaySound("PickUpPart");
-                    highlightBorder.SetActive(false);
-
-                    heldItem = pickedUpPart;
-                    heldItem.GetComponent<BoxCollider2D>().enabled = false;
-                    pickedUpPart.transform.SetParent(transform);
-                    pickedUpPart.transform.localPosition = itemOffset;
-                }
-            }
+            TryPickupFromSurface(surface, clickPosition);
         }
-        // Place Part
-        else if (surface != null && heldItem != null && IsTileWithinRange(tileObj))
+        else
         {
-            if (surface.PlaceItem(heldItem, clickPosition))
-            {
-                SFXManager.Instance.PlaySound("PlacePart");
-                heldItem.GetComponent<BoxCollider2D>().enabled = true;
-                heldItem = null;
-            }
-            else
-            {
-                SFXManager.Instance.PlaySound("Error");
-                heldItem.GetComponent<SpriteShaker>().Shake();
-            }
+            TryPlaceOnSurface(surface, clickPosition);
         }
     }
 
-    public void OnRightClick()
+    private void TryPickupFromSurface(IPlaceableSurface surface, Vector2 clickPosition)
     {
-        // if (currentAmmo > 0)
-        // {
-        //     ammoDisplay.DecreaseAmmo(1);
-        //     currentAmmo--;
-        //     SFXManager.Instance.PlaySound("TurretShoot");
-        //     Shoot();
-        // }
-        // else
-        // {
-        //     ammoDisplay.GetComponent<SpriteShaker>().Shake();
-        //     SFXManager.Instance.PlaySound("Empty");
-        // }
+        GameObject pickedUpPart = surface.PickUpItem(clickPosition);
+        if (pickedUpPart == null) return;
+
+        if (pickedUpPart.GetComponent<AmmoRefillPart>() != null)
+        {
+            SFXManager.Instance.PlaySound("PickUpItem");
+            ammoDisplay.ResetAmmo();
+            currentAmmo = maxAmmo;
+            Destroy(pickedUpPart);
+        }
+        else
+        {
+            SFXManager.Instance.PlaySound("PickUpPart");
+            highlightBorder.SetActive(false);
+            SetHeldItem(pickedUpPart);
+        }
     }
 
-    void Shoot()
+    private void TryPlaceOnSurface(IPlaceableSurface surface, Vector2 clickPosition)
     {
-        Instantiate(projectilePrefab, transform.position, transform.rotation, transform);
+        if (heldItem == null) return;
+
+        if (surface.PlaceItem(heldItem, clickPosition))
+        {
+            SFXManager.Instance.PlaySound("PlacePart");
+            EnableHeldItemCollider();
+            heldItem = null;
+        }
+        else
+        {
+            SFXManager.Instance.PlaySound("Error");
+            heldItem.GetComponentInChildren<SpriteShaker>()?.Shake();
+        }
+    }
+
+    private void SetHeldItem(GameObject item)
+    {
+        if (item == null) return;
+
+        heldItem = item;
+        heldItem.transform.SetParent(transform);
+        heldItem.transform.localPosition = itemOffset;
+
+        DisableHeldItemCollider();
+    }
+
+    private void DisableHeldItemCollider()
+    {
+        if (heldItem == null) return;
+
+        BoxCollider2D col = heldItem.GetComponent<BoxCollider2D>();
+        if (col != null) col.enabled = false;
+    }
+
+    private void EnableHeldItemCollider()
+    {
+        if (heldItem == null) return;
+
+        BoxCollider2D col = heldItem.GetComponent<BoxCollider2D>();
+        if (col != null) col.enabled = true;
+    }
+
+    public void OnRightClick() { }
+
+    public void OnSpace()
+    {
+        if (heldItem == null)
+        {
+            GameObject instantiatedPart = Instantiate(
+                gearPrefab,
+                transform.position,
+                Quaternion.identity,
+                transform
+            );
+
+            SetHeldItem(instantiatedPart);
+        }
     }
 
     public void OnE() => RotatePartAtHighlight(partRotateAmt * -1f);
@@ -221,11 +263,13 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane plane = new Plane(Vector3.forward, Vector3.zero);
+
         if (plane.Raycast(ray, out float distance))
         {
             Vector3 worldPoint = ray.GetPoint(distance);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
+
         return Vector2.zero;
     }
 
@@ -240,10 +284,28 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if (tile == null) return false;
 
-        Vector2 thisCenter = GetComponent<SpriteRenderer>().bounds.center;
-        Vector2 targetCenter = tile.GetComponent<SpriteRenderer>().bounds.center;
-        float distance = Vector2.Distance(thisCenter, targetCenter);
-        return distance <= interactRange;
+        SpriteRenderer playerSR = GetComponent<SpriteRenderer>();
+        SpriteRenderer tileSR = tile.GetComponent<SpriteRenderer>();
+
+        if (playerSR == null || tileSR == null)
+        {
+            float fallbackDistance = Vector2.Distance(transform.position, tile.transform.position);
+            return fallbackDistance <= interactRange;
+        }
+
+        Bounds a = playerSR.bounds;
+        Bounds b = tileSR.bounds;
+
+        float dx = 0f;
+        if (a.max.x < b.min.x)        dx = b.min.x - a.max.x;
+        else if (b.max.x < a.min.x)   dx = a.min.x - b.max.x;
+
+        float dy = 0f;
+        if (a.max.y < b.min.y)        dy = b.min.y - a.max.y;
+        else if (b.max.y < a.min.y)   dy = a.min.y - b.max.y;
+
+        float edgeDistance = Mathf.Sqrt(dx * dx + dy * dy);
+        return edgeDistance <= interactRange;
     }
 
     public void Died() => LifecycleManager.Instance.PlayerDied();
@@ -268,5 +330,31 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         spriteRenderer.enabled = true;
         invincibilityActive = false;
+    }
+
+    private void UpdateRangeIndicator()
+    {
+        if (rangeIndicator == null) return;
+
+        if (!showRangeIndicator)
+        {
+            rangeIndicator.enabled = false;
+            return;
+        }
+
+        if (!rangeIndicator.enabled)
+            rangeIndicator.enabled = true;
+
+        float angleStep = 360f / circleSegments;
+        Vector3 center = transform.position;
+        float z = center.z;
+
+        for (int i = 0; i < circleSegments; i++)
+        {
+            float angle = Mathf.Deg2Rad * angleStep * i;
+            float x = center.x + Mathf.Cos(angle) * interactRange;
+            float y = center.y + Mathf.Sin(angle) * interactRange;
+            rangeIndicator.SetPosition(i, new Vector3(x, y, z));
+        }
     }
 }
